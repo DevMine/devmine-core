@@ -17,3 +17,5 @@ environment:
 * install the required libraries through `pip`:
   `pip install -r requirements.txt`
 
+When contributing, make sure that your changes are conform to PEP8 by running
+`invoke pep8`.
