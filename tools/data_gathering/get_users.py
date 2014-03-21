@@ -126,7 +126,7 @@ class UserGet(object):
 
     # Writes msg both to stdout and to the log file
     def log(self, msg):
-        print ("[%d] UserGetter: " % (int(time.time()))) + msg
+        print(("[%d] UserGetter: " % (int(time.time()))) + msg)
         self.log_file.write("[" + str(time.time()) + "] " + msg + "\n")
 
     # Dumps the list of users to a file
@@ -145,9 +145,9 @@ class UserGet(object):
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
-        print "Usage: %s <first user> <last user> <output dir> [oauth id] [oauth secret]" % (sys.argv[0])
-        print "Gets all the users such that [first user < user id <= last user id ]"
-        print "When it runs out of API calls it waits"
+        print("Usage: %s <first user> <last user> <output dir> [oauth id] [oauth secret]" % (sys.argv[0]))
+        print("Gets all the users such that [first user < user id <= last user id ]")
+        print("When it runs out of API calls it waits")
         sys.exit(-1)
     else:
         since  = int(sys.argv[1])
