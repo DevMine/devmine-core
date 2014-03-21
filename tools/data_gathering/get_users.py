@@ -6,28 +6,31 @@
 #
 
 
-import json, httplib2, sys, time, socket
+import json
+import httplib2
+import sys
+import time
+import socket
 
 
 # User downloader
 class UserGet(object):
     def __init__(self, oauth_id, oauth_secret, since, stop, outdir):
-        self.oauth_id     = oauth_id
+        self.oauth_id = oauth_id
         self.oauth_secret = oauth_secret
 
-        self.since        = since
-        self.stop         = since
-        self.first_user   = since
-        self.url          = "https://api.github.com/users"
+        self.since = since
+        self.stop = since
+        self.first_user = since
+        self.url = "https://api.github.com/users"
 
         self.log_file = open(outdir + "/getter.log", "w")
         self.output_dir = outdir
 
-
     # Get one page of users with id > since
     def get_page(self, since):
         """Gets a page of users such that id > since. Waits for"""
-        h = httplib2.Http() # (".cache")
+        h = httplib2.Http()  # (".cache")
 
         url = self.url + "?since=%d" % (since)
 
@@ -35,10 +38,8 @@ class UserGet(object):
             url += "&client_id=%s&client_secret=%s" % (self.oauth_id,
                                                        self.oauth_secret)
 
-
         #self.log("Querying " + url)
         r, content = h.request(url, "GET")
-
 
         return r, content
 
@@ -49,7 +50,7 @@ class UserGet(object):
 
         last_user = self.since
 
-        try: # Catches KeyboardInterrupts to shutdown gracefully
+        try:  # Catches KeyboardInterrupts to shutdown gracefully
             while last_user < stop:
                 # Send request, repeat if network problem
                 try:
@@ -63,20 +64,20 @@ class UserGet(object):
                     self.log("Trying again...")
                     continue
 
-
                 # Check the response status code to see if the request was
                 # successful
-                if r['status']=='200':
+                if r['status'] == '200':
                     jcontent = json.loads(content)
 
                     # If we don't get new users, we stop
-                    if len(jcontent)==0 or self.since == jcontent[-1]['id']:
-                        self.log("Last request didn't return new users. Stopping!")
+                    if len(jcontent) == 0 or self.since == jcontent[-1]['id']:
+                        self.log("Last request didn't return new users. \
+                                 Stopping!")
                         self.dump(users)
                         return
                     else:
                         self.since = jcontent[-1]['id']
-                        last_user  = self.since
+                        last_user = self.since
 
                     users.extend(jcontent)
 
@@ -88,18 +89,18 @@ class UserGet(object):
 
                     time.sleep(3)
 
-
                 # Check the number remaining API calls
                 remaining_calls = int(r['x-ratelimit-remaining'])
 
                 if remaining_calls == 0:
                     waittime = int(r['x-ratelimit-reset']) - time.time()
-                    self.log("Waiting %d minutes for more API calls" % (waittime / 60))
+                    self.log("Waiting %d minutes for more API calls"
+                             % (waittime / 60))
                     time.sleep(waittime)
 
                 # Dump users if we have more than 5000
                 if len(users) > 5000:
-                    self.log("Remaining API calls: %d \t Last user obtained: %d"
+                    self.log("Remaining API calls: %d \tLast user obtained: %d"
                              % (remaining_calls, self.since))
 
                     self.dump(users)
@@ -123,7 +124,6 @@ class UserGet(object):
             self.log_file.flush()
             self.log_file.close()
 
-
     # Writes msg both to stdout and to the log file
     def log(self, msg):
         print(("[%d] UserGetter: " % (int(time.time()))) + msg)
@@ -132,7 +132,7 @@ class UserGet(object):
     # Dumps the list of users to a file
     def dump(self, users):
         if len(users) > 0:
-            out_name  = self.output_dir + "/users"
+            out_name = self.output_dir + "/users"
             out_name += "_" + str(users[0]['id']).zfill(7)
             out_name += "_" + str(users[-1]['id']).zfill(7)
             out_name += ".json"
@@ -145,25 +145,23 @@ class UserGet(object):
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
-        print("Usage: %s <first user> <last user> <output dir> [oauth id] [oauth secret]" % (sys.argv[0]))
-        print("Gets all the users such that [first user < user id <= last user id ]")
+        print("Usage: %s <first user> <last user> <output dir> "
+              "[oauth id] [oauth secret]" % (sys.argv[0]))
+        print("Gets all the users such that "
+              "[first user < user id <= last user id ]")
         print("When it runs out of API calls it waits")
         sys.exit(-1)
     else:
-        since  = int(sys.argv[1])
-        stop  = int(sys.argv[2])
+        since = int(sys.argv[1])
+        stop = int(sys.argv[2])
         outdir = sys.argv[3]
 
-
     if len(sys.argv) > 5:
-        oauth_id     = sys.argv[4]
+        oauth_id = sys.argv[4]
         oauth_secret = sys.argv[5]
     else:
-        oauth_id     = None
+        oauth_id = None
         oauth_secret = None
-
 
     getter = UserGet(oauth_id, oauth_secret, since, stop, outdir)
     getter.get_all()
-
-
