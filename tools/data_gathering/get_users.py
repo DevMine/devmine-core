@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 #
 #  This script can be used to query and save a range of user ids from GitHub
