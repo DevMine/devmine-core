@@ -6,4 +6,8 @@
 env/*
 !env/.keep
 
-
+# files
+alembic.ini
+devmine/config/settings.py
+devmine/db/dev.db
+devmine/db/devmine.db
