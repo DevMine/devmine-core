@@ -14,6 +14,9 @@ environment:
 * Activate it: `source env/bin/activate`.
 * Install the required libraries using `pip`:
   `pip install -r requirements.txt`
+* When contributing to the project, you also need to install development
+  requirements:
+  `pip install -r requirements_dev.txt`
 * Install a server backend. This should be corresponding to what you configure
   in the settings. Default is `tornado`:
   `pip install tornado`
