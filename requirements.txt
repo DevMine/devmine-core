@@ -1,6 +1,6 @@
-alembic>=0.6.3
+alembic>=0.6.4
 bottle>=0.12.5
 bottle-sqlalchemy>=0.4.1
 httplib2>=0.8
 invoke>=0.7.0
-SQLAlchemy>=0.9.3
+SQLAlchemy>=0.9.4
