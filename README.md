@@ -26,4 +26,6 @@ environment:
   `python run.py`
 
 When contributing, make sure that your changes are conform to PEP8 by running
-`invoke pep8`.
+`invoke pep8`. You may also want to do a static analysis of the code:
+`invoke pyflakes`. To run a full check (both PEP8 and static analysis), run:
+`invoke check`
