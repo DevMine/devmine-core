@@ -38,7 +38,7 @@ class UserGet(object):
             url += "&client_id=%s&client_secret=%s" % (self.oauth_id,
                                                        self.oauth_secret)
 
-        #self.log("Querying " + url)
+        # self.log("Querying " + url)
         r, content = h.request(url, "GET")
 
         return r, content
