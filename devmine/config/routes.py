@@ -1,5 +1,3 @@
-from bottle import route
-
 from devmine.app.controllers.index_controller import IndexController
 
 

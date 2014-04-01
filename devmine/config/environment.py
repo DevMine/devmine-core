@@ -1,5 +1,3 @@
-import os
-
 from devmine.config import settings
 
 if settings.environment == 'production':

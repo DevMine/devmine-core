@@ -6,10 +6,7 @@ from bottle.ext import sqlalchemy
 from sqlalchemy import create_engine
 
 from devmine.app.models import Base
-from devmine.config import (
-    routes,
-    settings
-)
+from devmine.config import routes
 
 
 class Devmine:
