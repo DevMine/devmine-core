@@ -59,6 +59,17 @@ def pep8():
 
 
 @task
+def pyflakes():
+    cmd = 'pyflakes run.py tasks.py ' + pydeo_dir
+    run_cmd(cmd)
+
+
+@task('pep8', 'pyflakes')
+def check():
+    pass
+
+
+@task
 def clean():
     run_cmd("find . -name '__pycache__' -exec rm -rf {} +")
     run_cmd("find . -name '*.pyc' -exec rm -f {} +")
