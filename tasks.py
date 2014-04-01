@@ -60,7 +60,7 @@ def pep8():
 
 @task
 def pyflakes():
-    cmd = 'pyflakes run.py tasks.py ' + pydeo_dir
+    cmd = 'pyflakes run.py tasks.py ' + devmine_dir + ' ' + tools_dir
     run_cmd(cmd)
 
 
