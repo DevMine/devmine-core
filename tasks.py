@@ -8,6 +8,7 @@ from invoke import (
 # define projects directories
 tools_dir = 'tools'
 devmine_dir = 'devmine'
+prototypes_dir = 'prototypes'
 config_dir = devmine_dir + '/config'
 test_dir = devmine_dir + '/test'
 func_test_dir = test_dir + '/functional'
@@ -55,12 +56,14 @@ def setup():
 @task
 def pep8():
     cmd = 'pep8 run.py tasks.py ' + devmine_dir + ' ' + tools_dir
+    cmd += ' ' + prototypes_dir
     run_cmd(cmd)
 
 
 @task
 def pyflakes():
     cmd = 'pyflakes run.py tasks.py ' + devmine_dir + ' ' + tools_dir
+    cmd += ' ' + prototypes_dir
     run_cmd(cmd)
 
 
