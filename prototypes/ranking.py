@@ -1,5 +1,6 @@
 """This file provides abstraction over the taks of computing the ranking"""
 
+
 class Ranking:
     """Compute the ranking for the developers based on a given composition
     function"""
