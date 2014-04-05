@@ -34,11 +34,15 @@ class RandomData(DataSource):
 class JsonData(DataSource):
     def __init__(self, dev_file, repo_file):
 
-        fp = codecs.open(dev_file, 'r', 'utf-8')
-        devs = json.load(fp)
+        devs = []
+        with codecs.open(dev_file, 'r', 'utf-8') as f:
+            for dev in f:
+                devs.append(json.loads(dev))
 
-        fp = codecs.open(repo_file, 'r', 'utf-8')
-        repos = json.load(repo_file)
+        repos = []
+        with codecs.open(repo_file, 'r', 'utf-8') as f:
+            for repo in f:
+                repos.append(json.loads(repo))
 
         self.developers = []
         self.scores = {}
