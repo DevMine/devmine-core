@@ -56,7 +56,7 @@ def main():
     for dev in devs:
         u = gh.user(dev)
         users.append(u.to_json())
-        for repo in iter_user_repos(u.login):
+        for repo in gh.iter_user_repos(u.login):
             repos.append(repo.to_json())
 
     dump_users(users)
