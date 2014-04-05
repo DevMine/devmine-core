@@ -6,8 +6,11 @@ import data
 import ranking
 import composition_functions
 
+
 def valid_features(query):
     valid = True
+    if len(query) % 2 != 0:
+        valid = False
     for key in dico:
         if key not in data_source.features:
             valid = False
@@ -65,7 +68,7 @@ if __name__ == "__main__":
                 pprint(ranking.rank_all(dico))
             else:
                 print('Invalid query')
-        except ValueError:
+        except Exception:
             print('Invalid query')
 
         query = input('\n\nEnter your query: ')
