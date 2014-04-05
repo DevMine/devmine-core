@@ -15,7 +15,7 @@ class DataSource:
 class RandomData(DataSource):
     def __init__(self, seed=None):
         r = random.Random(seed)
-        print(r.random())
+        #print(r.random())
 
         self.scores = {}
         self.features = ['Python', 'Cookies', 'Chocolate',
