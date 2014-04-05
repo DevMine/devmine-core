@@ -13,24 +13,6 @@ from github3 import (
 import gh_settings as settings
 
 
-def dump_users(users):
-    """Take a list of users as json and dump them to the json file for users as
-    defined in settings."""
-
-    fp = codecs.open(settings.USERS_DATASET, 'a', 'utf-8')
-    json.dump(users, fp)
-    fp.close()
-
-
-def dump_repos(repos):
-    """Take a list of repositories as json and dump them to the json file for
-    repositories as defined in settings."""
-
-    fp = codecs.open(settings.REPOS_DATASET, 'a', 'utf-8')
-    json.dump(repos, fp)
-    fp.close()
-
-
 def main():
     user = input('GitHub username: ')
     password = getpass('GitHub password: ')
@@ -66,7 +48,7 @@ def main():
 
         return result
 
-    # fetch none random developers
+    # get awesome developers
     devmine = call_or_wait(lambda:
                            gh.organization("DevMine").iter_public_members())
     # the lambda is used to make the call lazy, as there are multiple API
@@ -74,7 +56,7 @@ def main():
 
     devs = [dev.login for dev in devmine]
 
-    # fetch random developers
+    # get random developers
     for repo in call_or_wait(gh.iter_all_repos, number=3000, since=3452093):
         if repo.private:
             continue
@@ -82,19 +64,24 @@ def main():
 
     print(len(devs), "developers fetched")
 
-    users = []
-    repos = []
+    fpu = codecs.open(settings.USERS_DATASET, 'a', 'utf-8')
+    fpr = codecs.open(settings.REPOS_DATASET, 'a', 'utf-8')
 
     # dump developers and their repositories
+    users_processed = 0
     for dev in devs:
         u = call_or_wait(gh.user, dev)
-        users.append(u.to_json())
-        if len(users) % 500 == 0:
-            print("Repos feched for", len(users), "developers")
-        repos.extend(call_or_wait(gh.iter_user_repos, u.login))
+        json.dump(u.to_json(), fpu)
+        fpu.write("\n")
+        users_processed += 1
+        if users_processed % 100 == 0:
+            print("Repos feched for", users_processed, "developers")
+        for repo in call_or_wait(gh.iter_user_repos, u.login):
+            json.dump(repo.to_json(), fpr)
+            fpr.write("\n")
 
-    dump_users(users)
-    dump_repos(repos)
+    fpu.close()
+    fpr.close()
 
 
 if __name__ == "__main__":
