@@ -43,6 +43,7 @@ if __name__ == "__main__":
 
     query = ''
     query = input('Enter your query: \n\n')
+
     while query != 'quit':
         
         query = query.split()
@@ -51,6 +52,13 @@ if __name__ == "__main__":
             if i % 2 == 0:
                 dico[query[i]] = int(query[i+1])
       
-        pprint(ranking.rank_all(dico))
-
+        valid = True
+        for key in dico:
+            if key not in data_source.features:
+                valid = False
+        if valid:
+            pprint(ranking.rank_all(dico))
+        else:
+            print('invalid query')
+            
         query = input('\n\nEnter your query: ')
