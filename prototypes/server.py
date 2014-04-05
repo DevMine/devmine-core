@@ -26,8 +26,7 @@ if __name__ == "__main__":
         seed = sys.argv[1]
 
     data_source = data.RandomData(seed)
-    ranking = ranking.Ranking(data_source, composition_functions.dummy)
-    ranking.composition_function = composition_functions.weighted_sum
+    ranking = ranking.Ranking(data_source, composition_functions.weighted_sum)
 
     how_to = ('\nTo write your query, you can mention the feature(s) you are '
               'interested\nin and give them some weight, or importance.\n'
@@ -62,7 +61,7 @@ if __name__ == "__main__":
         try:
             for i in range(len(query)):
                 if i % 2 == 0:
-                    dico[query[i].title()] = int(query[i+1])
+                    dico[query[i].lower()] = int(query[i+1])
 
             if valid_features(query):
                 pprint(ranking.rank_all(dico))
