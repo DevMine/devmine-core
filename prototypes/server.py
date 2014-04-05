@@ -18,7 +18,7 @@ if __name__ == "__main__":
     data_source = data.RandomData(seed)
     ranking = ranking.Ranking(data_source, composition_functions.dummy)
     ranking.composition_function = composition_functions.weighted_sum
-    
+
     how_to = ('\nTo write your query, you can mention the feature(s) you are '
               'interested\nin and give them some weight, or importance.\n'
               'It will return the most skilled users combining those skills, '
@@ -38,20 +38,20 @@ if __name__ == "__main__":
     print('\nHere are the features you can query over:\n')
     for features in data_source.features:
         print(features)
-    
+
     print('\nEnter "quit" to stop your search of amazing developers.\n')
 
     query = ''
     query = input('Enter your query: \n\n')
 
     while query != 'quit':
-        
+
         query = query.split()
         dico = dict()
         for i in range(len(query)):
             if i % 2 == 0:
                 dico[query[i]] = int(query[i+1])
-      
+
         valid = True
         for key in dico:
             if key not in data_source.features:
@@ -60,5 +60,5 @@ if __name__ == "__main__":
             pprint(ranking.rank_all(dico))
         else:
             print('invalid query')
-            
+
         query = input('\n\nEnter your query: ')
