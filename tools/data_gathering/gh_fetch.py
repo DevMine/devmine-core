@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 import codecs
 import json
 
@@ -38,15 +35,21 @@ def main():
         gh = GitHub()
 
     # fetch none random developers
-    awesome_developers = [user.login for user in
-                          gh.organization("DevMine").iter_public_members()]
+    devs = [user.login for user in
+            gh.organization("DevMine").iter_public_members()]
+
+    # fetch random developers
+    for repo in gh.iter_all_repos(number=3000, since=3452093):
+        if repo.private:
+            continue
+        devs.append(repo.owner)
 
     users = []
     repos = []
 
     # dump developers and their repositories
-    for user in awesome_developers:
-        u = gh.user(user)
+    for dev in devs:
+        u = gh.user(dev)
         users.append(u.to_json())
         for repo in iter_user_repos(u.login):
             repos.append(repo.to_json())
