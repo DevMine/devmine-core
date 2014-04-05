@@ -6,6 +6,13 @@ import data
 import ranking
 import composition_functions
 
+def valid_features(query):
+    valid = True
+    for key in dico:
+        if key not in data_source.features:
+            valid = False
+    return valid
+
 
 if __name__ == "__main__":
     import sys
@@ -23,7 +30,7 @@ if __name__ == "__main__":
               'interested\nin and give them some weight, or importance.\n'
               'It will return the most skilled users combining those skills, '
               'and their scores,\naccording to DevMine\'s crazy algorithm.\n\n'
-              'For example, the query: Python 5 Superpower 10\n'
+              'For example, the query: python 5 superpower 10\n'
               'will give you:\n\n')
     example = """
         [('Kevin', 11.240153556173475),
@@ -48,17 +55,17 @@ if __name__ == "__main__":
 
         query = query.split()
         dico = dict()
-        for i in range(len(query)):
-            if i % 2 == 0:
-                dico[query[i]] = int(query[i+1])
 
-        valid = True
-        for key in dico:
-            if key not in data_source.features:
-                valid = False
-        if valid:
-            pprint(ranking.rank_all(dico))
-        else:
-            print('invalid query')
+        try:
+            for i in range(len(query)):
+                if i % 2 == 0:
+                    dico[query[i].title()] = int(query[i+1])
+
+            if valid_features(query):
+                pprint(ranking.rank_all(dico))
+            else:
+                print('Invalid query')
+        except ValueError:
+            print('Invalid query')
 
         query = input('\n\nEnter your query: ')
