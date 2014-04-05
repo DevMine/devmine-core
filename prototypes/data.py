@@ -3,6 +3,7 @@
 import random
 import json
 import datetime
+import codecs
 
 
 class DataSource:
@@ -18,8 +19,8 @@ class RandomData(DataSource):
         # print(r.random())
 
         self.scores = {}
-        self.features = ['Python', 'Cookies', 'Chocolate',
-                         'Superpowers', 'Doge']
+        self.features = ['python', 'cookies', 'chocolate',
+                         'superpowers', 'doge']
         self.developers = ['Robin', 'Kevin', 'Laurent', 'Xuan',
                            'Frederik', 'Daniel', 'Clément']
 
@@ -33,8 +34,11 @@ class RandomData(DataSource):
 class JsonData(DataSource):
     def __init__(self, dev_file, repo_file):
 
-        devs = json.load(open(dev_file))
-        repos = json.load(open(repo_file))
+        fp = codecs.open(dev_file, 'r', 'utf-8')
+        devs = json.load(fp)
+
+        fp = codecs.open(repo_file, 'r', 'utf-8')
+        repos = json.load(repo_file)
 
         self.developers = []
         self.scores = {}
@@ -47,10 +51,11 @@ class JsonData(DataSource):
             self.scores[dev['login']] = self.compute_scores(dev, dev_repos)
 
         # Compute the list of features
-        self.features = []
+        self.features = set()
         for v in self.scores.values():
             for k in v.keys():
-                self.features.append(k)
+                self.features.add(k)
+        self.features = list(self.features)
 
     def compute_scores(self, dev, repos):
         score = {}
@@ -69,10 +74,10 @@ class JsonData(DataSource):
 
         for repo in repos:
             if repo['language'] is not None:
-                if repo['language'] in score.keys():
-                    score[repo['language']] += int(repo['size'])
+                if repo['language'].lower() in score.keys():
+                    score[repo['language'].lower()] += int(repo['size'])
                 else:
                     score['number_languages'] += 1
-                    score[repo['language']] = int(repo['size'])
+                    score[repo['language'].lower()] = int(repo['size'])
 
         return score
