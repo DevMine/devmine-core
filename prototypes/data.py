@@ -2,6 +2,7 @@
 
 import random
 import json
+import datetime
 
 
 class DataSource:
@@ -57,11 +58,21 @@ class JsonData(DataSource):
         score['followers'] = dev['followers']
         score['public_repos'] = dev['public_repos']
 
+        created = datetime.datetime.strptime(dev['created_at'],
+                                             "%Y-%m-%dT%H:%M:%SZ")
+        updated = datetime.datetime.strptime(dev['updated_at'],
+                                             "%Y-%m-%dT%H:%M:%SZ")
+        score['created_at'] = int(created.timestamp())
+        score['updated_at'] = int(updated.timestamp())
+
+        score['number_languages'] = 0
+
         for repo in repos:
             if repo['language'] is not None:
                 if repo['language'] in score.keys():
                     score[repo['language']] += int(repo['size'])
                 else:
+                    score['number_languages'] += 1
                     score[repo['language']] = int(repo['size'])
 
         return score
