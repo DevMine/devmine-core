@@ -1,6 +1,7 @@
 # general patterns
 *.cache
 *.directory
+*.json
 *.pyc
 *.swp
 env/*
@@ -11,3 +12,4 @@ alembic.ini
 devmine/config/settings.py
 devmine/db/dev.db
 devmine/db/devmine.db
+tools/data_gathering/gh_settings.py
