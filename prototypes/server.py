@@ -68,7 +68,7 @@ if __name__ == "__main__":
                 pprint(ranking.rank_all(dico))
             else:
                 print('Invalid query')
-        except Exception:
+        except (TypeError, IndexError):
             print('Invalid query')
 
         query = input('\n\nEnter your query: ')
