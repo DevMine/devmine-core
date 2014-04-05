@@ -11,9 +11,9 @@ class AbstractFeature(metaclass=ABCMeta):
 
     @abstractmethod
 
-    def compute_score(self, id):
+    def compute_score(self, entity):
 
-	"""Compute the score for this feature for the given id"""
+	"""Compute the score for this feature for the given entity"""
 
 	pass
 
@@ -43,3 +43,17 @@ class DataNotSufficientError(Exception):
 
     def __str__(self):
         return repr(self.value)
+
+class FollowersFeature(AbstractFeature):
+
+    __key__ = 'followers'
+
+    def compute_score(self, entity):
+	return entity[__key__]
+
+    def __verify_sufficient_data__(self, data_source):
+	if (not data_source.developers 
+            or not __key__ in data_source.developers[0]):
+	    raise DataNotSufficientError("Either " + data_source +
+                                         " is empty or '" + __key__ + 
+                                         "' was not valid as a key")
