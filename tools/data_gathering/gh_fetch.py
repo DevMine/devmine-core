@@ -1,13 +1,14 @@
-import argparse
 import codecs
 import json
+import time
 from getpass import getpass
 
 from github3 import (
     GitHub,
-    iter_user_repos,
+    GitHubError,
     login
 )
+
 
 import gh_settings as settings
 
@@ -39,25 +40,58 @@ def main():
     else:
         gh = GitHub()
 
+    # It is defined inside the main because it makes use of the current gh
+    def call_or_wait(function, *args, **kargs):
+        '''Given a function and some arguments, tries to execute the function
+        or waits until the ratelimit is reset.'''
+
+        success = False
+        while not success:
+            try:
+                result = function(*args, **kargs)
+                success = True
+            except GitHubError as e:
+                if e.code == 403:
+                    # rate limit exceeded
+                    reset = gh.rate_limit()['rate']['reset']
+                    wait_time = int(reset - time.time()) + 1
+
+                    print("Not enough API calls. Waiting for",
+                          int(wait_time / 60), "minutes and",
+                          wait_time % 60, "seconds")
+
+                    time.sleep(wait_time)
+                else:
+                    raise e
+
+        return result
+
     # fetch none random developers
-    devs = [user.login for user in
-            gh.organization("DevMine").iter_public_members()]
+    devmine = call_or_wait(lambda:
+                           gh.organization("DevMine").iter_public_members())
+    # the lambda is used to make the call lazy, as there are multiple API
+    # calls involved in the statement
+
+    devs = [dev.login for dev in devmine]
 
     # fetch random developers
-    for repo in gh.iter_all_repos(number=3000, since=3452093):
+    for repo in call_or_wait(gh.iter_all_repos, number=3000, since=3452093):
         if repo.private:
             continue
         devs.append(repo.owner)
+
+    print(len(devs), "developers fetched")
 
     users = []
     repos = []
 
     # dump developers and their repositories
     for dev in devs:
-        u = gh.user(dev)
+        u = call_or_wait(gh.user, dev)
         users.append(u.to_json())
-        for repo in gh.iter_user_repos(u.login):
-            repos.append(repo.to_json())
+        if len(users) % 500 == 0:
+            print("Repos feched for", len(users), "developers")
+        repos.extend(call_or_wait(gh.iter_user_repos, u.login))
 
     dump_users(users)
     dump_repos(repos)
