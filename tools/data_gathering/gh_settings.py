@@ -1,5 +1,2 @@
-GH_USER = "foo" # or None
-GH_PASSWORD = "bar" # or None
-
 REPOS_DATASET = "repos.json"
 USERS_DATASET = "users.json"

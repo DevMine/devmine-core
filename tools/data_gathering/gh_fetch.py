@@ -1,5 +1,7 @@
+import argparse
 import codecs
 import json
+from getpass import getpass
 
 from github3 import (
     GitHub,
@@ -29,8 +31,11 @@ def dump_repos(repos):
 
 
 def main():
-    if settings.GH_USER and settings.GH_PASSWORD:
-        gh = login(settings.GH_USER, settings.GH_PASSWORD)
+    user = input('GitHub username: ')
+    password = getpass('GitHub password: ')
+
+    if user and password:
+        gh = login(user, password)
     else:
         gh = GitHub()
 
