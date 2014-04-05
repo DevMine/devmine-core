@@ -29,24 +29,6 @@ class RandomData(DataSource):
             self.scores[developer] = scores
 
 
-class RandomData(DataSource):
-    def __init__(self, seed=None):
-        r = random.Random(seed)
-        print(r.random())
-
-        self.scores = {}
-        self.features = ['Python', 'Cookies', 'Chocolate',
-                         'Superpowers', 'Doge']
-        self.developers = ['Robin', 'Kevin', 'Laurent', 'Xuan',
-                           'Frederik', 'Daniel', 'Clément']
-
-        for developer in self.developers:
-            scores = {}
-            for feature in self.features:
-                scores[feature] = r.random()
-            self.scores[developer] = scores
-
-
 class JsonData(DataSource):
     def __init__(self, dev_file, repo_file):
 
@@ -69,7 +51,6 @@ class JsonData(DataSource):
             for k in v.keys():
                 self.features.append(k)
 
-
     def compute_scores(self, dev, repos):
         score = {}
 
@@ -77,7 +58,7 @@ class JsonData(DataSource):
         score['public_repos'] = dev['public_repos']
 
         for repo in repos:
-            if repo['language'] != None:
+            if repo['language'] is not None:
                 if repo['language'] in score.keys():
                     score[repo['language']] += int(repo['size'])
                 else:
