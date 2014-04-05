@@ -17,11 +17,9 @@ if __name__ == "__main__":
 
     data_source = data.RandomData(seed)
 
-    print('\nHere are the features you can query over:\n')
-    for features in data_source.features:
-        print(features)
 
-    how_to = ('To write your query, you can mention the feature(s) you are '
+
+    how_to = ('\nTo write your query, you can mention the feature(s) you are '
               'interested\nin and give them some weight, or importance.\n'
               'It will return the most skilled users combining those skills, '
               'and their scores,\naccording to DevMine\'s crazy algorithm.\n\n'
@@ -35,9 +33,13 @@ if __name__ == "__main__":
          ('Robin', 7.060494410357596),
          ('Daniel', 5.780794009967852),
          ('Xuan', 4.955532838858104)]\n"""
-    
     print(how_to, example)
-    print('Enter "quit" to stop your search of amazing developers.')
+
+    print('\nHere are the features you can query over:\n')
+    for features in data_source.features:
+        print(features)
+    
+    print('\nEnter "quit" to stop your search of amazing developers.\n')
 
     query = ''
     query = input('Enter your query: \n\n')
@@ -51,7 +53,6 @@ if __name__ == "__main__":
         for i in range(len(query)):
             if i % 2 == 0:
                 dico[query[i]] = int(query[i+1])
-
 
         
         pprint(ranking.rank_all(dico))
