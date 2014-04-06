@@ -60,9 +60,11 @@ def main():
     for repo in call_or_wait(gh.iter_all_repos,
                              number=settings.REPOS_COUNT,
                              since=settings.REPOS_SINCE_ID):
-        if repo.private:
+        # skip organizations and forked repository to find users that actually
+        # added new content
+        if repo.private or repo.fork or (repo.owner.type == 'Organization'):
             continue
-        devs.add(repo.owner)
+        devs.add(repo.owner.login)
 
     print(len(devs), "developers fetched")
 
