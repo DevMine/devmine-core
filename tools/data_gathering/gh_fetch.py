@@ -54,13 +54,13 @@ def main():
     # the lambda is used to make the call lazy, as there are multiple API
     # calls involved in the statement
 
-    devs = [dev.login for dev in devmine]
+    devs = {dev.login for dev in devmine}
 
     # get random developers
     for repo in call_or_wait(gh.iter_all_repos, number=3000, since=3452093):
         if repo.private:
             continue
-        devs.append(repo.owner)
+        devs.add(repo.owner)
 
     print(len(devs), "developers fetched")
 
