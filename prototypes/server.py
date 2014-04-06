@@ -64,7 +64,7 @@ if __name__ == "__main__":
                     dico[query[i].lower()] = int(query[i+1])
 
             if valid_features(query):
-                pprint(ranking.rank_all(dico))
+                pprint(ranking.rank_all(dico)[:10])
             else:
                 print('Invalid query')
         except (TypeError, IndexError):
