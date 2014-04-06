@@ -7,7 +7,7 @@ class AbstractFeature(metaclass=ABCMeta):
 
     def __init__(self, data_source):
         self.data_source = data_source
-        __verify_sufficient_data__(data_source)
+        self.__verify_sufficient_data__(data_source)
 
     @abstractmethod
     def compute_score(self, entity):
@@ -40,11 +40,11 @@ class FollowersFeature(AbstractFeature):
     __key__ = 'followers'
 
     def compute_score(self, entity):
-        return entity[__key__]
+        return entity[self.__key__]
 
     def __verify_sufficient_data__(self, data_source):
         if (not data_source.developers
-                or __key__ not in data_source.developers[0]):
+                or self.__key__ not in data_source.developers[0]):
             raise DataNotSufficientError("Either " + data_source +
-                                         " is empty or '" + __key__ +
+                                         " is empty or '" + self.__key__ +
                                          "' was not valid as a key")
