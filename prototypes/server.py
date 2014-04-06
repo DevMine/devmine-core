@@ -1,5 +1,3 @@
-#! /usr/bin/env python3.4
-# coding utf-8
 """This file runs the prototype"""
 
 import data
