@@ -57,7 +57,9 @@ def main():
     devs = {dev.login for dev in devmine}
 
     # get random developers
-    for repo in call_or_wait(gh.iter_all_repos, number=3000, since=3452093):
+    for repo in call_or_wait(gh.iter_all_repos,
+                             number=settings.REPOS_COUNT,
+                             since=settings.REPOS_SINCE_ID):
         if repo.private:
             continue
         devs.add(repo.owner)
