@@ -58,7 +58,7 @@ class JsonData(DataSource):
         self.features = set()
         for v in self.scores.values():
             for k in v.keys():
-                self.features.add(k)
+                self.features.add(k.replace(' ',''))
         self.features = list(self.features)
 
     def compute_scores(self, dev, repos):
