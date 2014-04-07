@@ -31,6 +31,13 @@ class RandomData(DataSource):
             self.scores[developer] = scores
 
 
+def iter_repos(repo_file):
+    with codecs.open(repo_file, 'r', 'utf-8') as f:
+        for repo in f:
+            yield json.loads(repo)
+        return
+
+
 class JsonData(DataSource):
     def __init__(self, dev_file, repo_file):
 
@@ -39,20 +46,15 @@ class JsonData(DataSource):
             for dev in f:
                 devs.append(json.loads(dev))
 
-        repos = []
-        with codecs.open(repo_file, 'r', 'utf-8') as f:
-            for repo in f:
-                repos.append(json.loads(repo))
-
         self.developers = []
         self.scores = {}
 
         for dev in devs:
-            dev_repos = [repo for repo in repos
-                         if repo['owner']['login'] == dev['login']]
-
             self.developers.append(dev['login'])
-            self.scores[dev['login']] = self.compute_scores(dev, dev_repos)
+            self.scores[dev['login']] = self.compute_scores(dev)
+
+        # scores related to repos
+        self.compute_scores_repos(repo_file)
 
         # Compute the list of features
         self.features = set()
@@ -61,7 +63,19 @@ class JsonData(DataSource):
                 self.features.add(k.replace(' ',''))
         self.features = list(self.features)
 
-    def compute_scores(self, dev, repos):
+    def compute_scores_repos(self, repo_file):
+        for repo in iter_repos(repo_file):
+            owner = repo['owner']['login']
+            if owner in self.scores.keys():
+                score = self.scores[owner]
+                if repo['language'] is not None:
+                    if repo['language'].lower() in score.keys():
+                        score[repo['language'].lower()] += int(repo['size'])
+                    else:
+                        score['number_languages'] += 1
+                        score[repo['language'].lower()] = int(repo['size'])
+
+    def compute_scores(self, dev):
         score = {}
 
         score['followers'] = dev['followers']
@@ -75,13 +89,5 @@ class JsonData(DataSource):
         score['updated_at'] = int(updated.timestamp())
 
         score['number_languages'] = 0
-
-        for repo in repos:
-            if repo['language'] is not None:
-                if repo['language'].lower() in score.keys():
-                    score[repo['language'].lower()] += int(repo['size'])
-                else:
-                    score['number_languages'] += 1
-                    score[repo['language'].lower()] = int(repo['size'])
 
         return score
