@@ -6,6 +6,8 @@
 *.swp
 env/*
 !env/.keep
+devmine/log/*
+!devmine/log/.keep
 
 # files
 alembic.ini
