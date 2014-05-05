@@ -3,7 +3,6 @@
 
 import bottle
 import logging
-from logging import info
 
 from devmine import Devmine
 from devmine.config import (
