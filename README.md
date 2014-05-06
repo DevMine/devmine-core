@@ -42,9 +42,10 @@ probably reveal being valuable source of information.
 ## Project structure
 
 The project is divided into two main parts: the offline and the online part.
-The offline part is responsible of computing features, thus it lays in the
-`features` module. The online part provides the API and lays in the `devmine`
-module.
+The offline part is responsible of computing features and it is implemented in
+the [devmine-features](https://github.com/DevMine/devmine-features) repository.
+The online part provides the API and lays in the `devmine` module from this
+repository.
 
 ![](data/project-structure.png))
 
