@@ -11,6 +11,8 @@ class IndexController(ApplicationController):
 
     def index(self):
         """Render index page."""
-        data = {"devmine-version:":devmine.Devmine.get_version(),
-                "api-version:":devmine.Devmine.get_api_version()}
+        data = {
+            "devmine-version:": devmine.Devmine.get_version(),
+            "api-version:": devmine.Devmine.get_api_version()
+        }
         return json.dumps(data)
