@@ -1,7 +1,10 @@
 import json
-from io import StringIO
-from bottle import abort
 import logging
+from io import StringIO
+from urllib import parse
+
+from bottle import abort
+from devmine.lib.composition import construct_weight_vector
 from devmine.app.controllers.application_controller import (
     ApplicationController
 )
@@ -10,13 +13,14 @@ from devmine.app.controllers.application_controller import (
 class SearchController(ApplicationController):
     """Class for handling search query."""
 
-    def query(self, q):
+    def query(self, db, q):
         """Return search result as a JSON string"""
         try:
-            io = StringIO(q)
+            io = StringIO(parse.unquote(q))
             feature_weights = json.load(io)
+            construct_weight_vector(db, feature_weights)
         except:
-            logging.error('Malformed JSON query')
+            logging.exception('SearchController:query')
             abort(400, 'Malformed JSON query')
 
         # TODO send the feature weights to the composition function
