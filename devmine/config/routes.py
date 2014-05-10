@@ -10,5 +10,5 @@ def setup_routing(app):
 
     app.route('/', 'GET', IndexController().index)
     app.route('/search/<q>', 'GET', SearchController().query)
-    app.route('/features/by_category/<category>', 'GET',
+    app.route('/features/by_category', 'GET',
               FeaturesController().by_category)
