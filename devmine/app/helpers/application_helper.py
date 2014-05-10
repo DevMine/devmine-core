@@ -1,6 +1,7 @@
 import json
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
+
 def obj_to_json(obj):
     """
     Serialize an object to JSON.
@@ -14,6 +15,7 @@ def obj_to_json(obj):
         json.dumps(data)
         fields[field] = data
     return fields
+
 
 class AlchemyEncoder(json.JSONEncoder):
     """
