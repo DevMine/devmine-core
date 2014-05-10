@@ -20,6 +20,7 @@ class Score(Base):
     fname = Column(String,
                    ForeignKey('features.name'),
                    nullable=False)
+    score = Column(Integer)
 
     def __init__(self):
         pass
