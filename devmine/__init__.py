@@ -45,3 +45,13 @@ class Devmine:
             use_kwargs=False
         )
         self.app.install(sqlalchemy_plugin)
+
+    @staticmethod
+    def get_version():
+        """Return devmine version."""
+        return __devmine_version__
+
+    @staticmethod
+    def get_api_version():
+        """Return devmine API version."""
+        return __api_version__
