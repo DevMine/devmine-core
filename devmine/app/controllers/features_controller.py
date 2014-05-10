@@ -1,7 +1,4 @@
 import json
-from io import StringIO
-from bottle import abort
-import logging
 from devmine.app.models.feature import Feature
 from devmine.app.controllers.application_controller import (
     ApplicationController
