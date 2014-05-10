@@ -54,15 +54,13 @@ def setup():
 
 @task
 def pep8():
-    cmd = 'pep8 run.py tasks.py ' + devmine_dir + ' ' + tools_dir
-    cmd += ' ' + features_dir
+    cmd = 'pep8 run.py tasks.py ' + devmine_dir
     run_cmd(cmd)
 
 
 @task
 def pyflakes():
-    cmd = 'pyflakes run.py tasks.py ' + devmine_dir + ' ' + tools_dir
-    cmd += ' ' + features_dir
+    cmd = 'pyflakes run.py tasks.py ' + devmine_dir
     run_cmd(cmd)
 
 
