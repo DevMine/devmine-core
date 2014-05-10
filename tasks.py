@@ -7,7 +7,6 @@ from invoke import (
 
 # define projects directories
 devmine_dir = 'devmine'
-features_dir = 'features'
 config_dir = devmine_dir + '/config'
 test_dir = devmine_dir + '/test'
 func_test_dir = test_dir + '/functional'
