@@ -14,6 +14,7 @@ class Feature(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False, unique=True)
+    category = Column(String, nullable=False)
 
     def __init__(self):
         pass
