@@ -9,6 +9,7 @@ from devmine.app.helpers import application_helper as ah
 class FeaturesController(ApplicationController):
     """Class for handling requests on the feature resource."""
 
+    @ApplicationController.enable_cors
     def by_category(self, db):
         """Return all features sorted by category as a JSON string
         like the following:
