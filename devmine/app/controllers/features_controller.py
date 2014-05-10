@@ -1,7 +1,8 @@
 import json
 from devmine.app.models.feature import Feature
 from devmine.app.controllers.application_controller import (
-    ApplicationController
+    ApplicationController,
+    enable_cors
 )
 from devmine.app.helpers import application_helper as ah
 
@@ -9,12 +10,14 @@ from devmine.app.helpers import application_helper as ah
 class FeaturesController(ApplicationController):
     """Class for handling requests on the feature resource."""
 
-    @ApplicationController.enable_cors
     def by_category(self, db):
         """Return all features sorted by category as a JSON string
         like the following:
             {'category1': ['feature1': {...}, ...], 'category2': [...]}
         """
+
+        enable_cors()
+
         features = db.query(Feature).order_by(
             Feature.category, Feature.name).all()
 
