@@ -6,7 +6,8 @@ from urllib import parse
 from bottle import abort
 from devmine.lib.composition import rank
 from devmine.app.controllers.application_controller import (
-    ApplicationController
+    ApplicationController,
+    enable_cors
 )
 
 
