@@ -17,6 +17,9 @@ class Score(Base):
     ulogin = Column(String,
                     ForeignKey('users.login'),
                     nullable=False)
+    did = Column(Integer,
+                 ForeignKey('developers.id'),
+                 nullable=False)
     fname = Column(String,
                    ForeignKey('features.name'),
                    nullable=False)
