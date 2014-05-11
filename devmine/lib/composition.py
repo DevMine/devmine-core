@@ -15,10 +15,13 @@ def __construct_weight_vector(db, query):
     """
 
     features = db.query(Feature).order_by(Feature.name).all()
-    weight_vector = {f.name: f.default_weight for f in features}
 
-    for k in query:
-        weight_vector[k] = query[k]
+    weight_vector = []
+    for f in features:
+        if f.name in query:
+            weight_vector.append(query[f.name])
+        else:
+            weight_vector.append(f.default_weight)
 
     return weight_vector
 
@@ -68,7 +71,7 @@ def rank(db, query):
     w = __construct_weight_vector(db, query)
 
     A = np.matrix(list(d.values()))
-    b = np.matrix(list(w.values())).transpose()
+    b = np.matrix(w).transpose()
     u = list(d.keys())
 
     return __compute_scores(A, b, u)
