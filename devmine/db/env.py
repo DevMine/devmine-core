@@ -6,7 +6,7 @@ from logging.config import fileConfig
 import os
 import sys
 
-# add current working directory to path in order to import pydeo models
+# add current working directory to path in order to import DevMine models
 sys.path = [os.getcwd()] + sys.path
 from devmine.app import models
 
