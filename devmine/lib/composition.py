@@ -5,6 +5,10 @@ from devmine.app.models.feature import Feature
 from devmine.app.models.score import Score
 
 
+__scores_matrix = None
+__users_list = None
+
+
 def __construct_weight_vector(db, query):
     """
     Construct a weight vector, taking default weight from features from the
@@ -26,9 +30,9 @@ def __construct_weight_vector(db, query):
     return weight_vector
 
 
-def __compute_scores(A, b, u):
+def __compute_ranks(A, b, u):
     """
-    Compute the scores vector using a weighted sum.
+    Compute the ranks vector using a weighted sum.
 
     Parameter
     ---------
@@ -41,13 +45,13 @@ def __compute_scores(A, b, u):
 
     Return
     ------
-    retval:  Dictionnary of the form {'username1': score1, ...}
+    retval:  Dictionnary of the form {'username1': rank1, ...}
     """
 
-    scores = np.dot(A, b)
+    ranks = np.dot(A, b)
 
     retval = {}
-    it = np.nditer(scores, flags=['f_index'])
+    it = np.nditer(ranks, flags=['f_index'])
     while not it.finished:
         retval[u[it.index]] = it[0].tolist()
         it.iternext()
@@ -55,23 +59,37 @@ def __compute_scores(A, b, u):
     return retval
 
 
+def __get_scores_matrix(db):
+    """
+    Returns the scores matrix and the list of associated users.
+    Data is computed/accessed once and is cached in memory for later calls.
+    """
+    global __scores_matrix
+    global __users_list
+
+    if __scores_matrix is None:
+        scores = db.query(Score).order_by(Score.fname).all()
+
+        d = {}
+        for s in scores:
+            if s.ulogin not in d:
+                d[s.ulogin] = []
+            d[s.ulogin].append(s.score)
+
+        __scores_matrix = np.matrix(list(d.values()))
+        __users_list = list(d.keys())
+
+    return __scores_matrix, __users_list
+
+
 def rank(db, query):
     """
     Compute the ranking for the developers.
     The weight vector is determined from the user query.
     """
-    scores = db.query(Score).order_by(Score.fname).all()
-
-    d = {}
-    for s in scores:
-        if s.ulogin not in d:
-            d[s.ulogin] = []
-        d[s.ulogin].append(s.score)
-
     w = __construct_weight_vector(db, query)
 
-    A = np.matrix(list(d.values()))
+    A, u = __get_scores_matrix(db)
     b = np.matrix(w).transpose()
-    u = list(d.keys())
 
-    return __compute_scores(A, b, u)
+    return __compute_ranks(A, b, u)
