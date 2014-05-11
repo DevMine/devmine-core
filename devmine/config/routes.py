@@ -22,8 +22,8 @@ def setup_routing(app):
     app.route('/developers', 'GET', DevelopersController().index)
 
     # features
-    app.route('/features/by_category', 'GET',
-              FeaturesController().by_category)
+    app.route('/features', 'GET', FeaturesController().index)
+    app.route('/features/by_category', 'GET', FeaturesController().by_category)
 
     # repositories
     app.route('/repositories', 'GET', RepositoriesController().index)

@@ -10,6 +10,9 @@ from devmine.app.helpers import application_helper as ah
 class FeaturesController(ApplicationController):
     """Class for handling requests on the feature resource."""
 
+    def index(self, db):
+        return json.dumps(db.query(Feature).all(), cls=ah.AlchemyEncoder)
+
     def by_category(self, db):
         """Return all features sorted by category as a JSON string
         like the following:
