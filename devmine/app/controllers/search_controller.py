@@ -22,8 +22,12 @@ class SearchController(ApplicationController):
         try:
             io = StringIO(parse.unquote(q))
             feature_weights = json.load(io)
-            ranking = rank(db, feature_weights)
+            ranking, elsapsed_time = rank(db, feature_weights)
         except:
             logging.exception('SearchController:query')
             abort(400, 'Malformed JSON query')
-        return json.dumps(ranking)
+
+        results = {'results': ranking,
+                   'elapsed_time': "%0.9f" % (elsapsed_time)}
+
+        return json.dumps(results)

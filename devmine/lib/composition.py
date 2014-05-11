@@ -1,5 +1,6 @@
 """This file provides abstraction over the tasks of computing the ranking"""
 import numpy as np
+import time
 
 from devmine.app.models.feature import Feature
 from devmine.app.models.score import Score
@@ -50,10 +51,13 @@ def __compute_ranks(A, b, u):
 
     ranks = np.dot(A, b)
 
-    retval = {}
+    retval = []
     it = np.nditer(ranks, flags=['f_index'])
     while not it.finished:
-        retval[u[it.index]] = it[0].tolist()
+        retval.append({
+            'ulogin': u[it.index],
+            'rank': it[0].tolist()
+        })
         it.iternext()
 
     return retval
@@ -87,9 +91,14 @@ def rank(db, query):
     Compute the ranking for the developers.
     The weight vector is determined from the user query.
     """
+    start_time = time.time()
+
     w = __construct_weight_vector(db, query)
 
     A, u = __get_scores_matrix(db)
     b = np.matrix(w).transpose()
 
-    return __compute_ranks(A, b, u)
+    end_time = time.time()
+    elapsed_time = (end_time-start_time) / 1000
+
+    return __compute_ranks(A, b, u), elapsed_time
