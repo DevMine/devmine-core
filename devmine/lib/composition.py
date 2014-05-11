@@ -41,8 +41,8 @@ def __compute_ranks(A, b, u):
         features. The values of each feature must be normalized between
         0 and 1.
     b:  Weights vector of size n
-    u:  Vector of size n that contains the user names. They must match
-        the rows of the vector b.
+    u:  List of dictionnaries of size n that contains the ulogin and the
+        did (developer ID). It must match the rows of the vector b.
 
     Return
     ------
@@ -55,8 +55,9 @@ def __compute_ranks(A, b, u):
     it = np.nditer(ranks, flags=['f_index'])
     while not it.finished:
         retval.append({
-            'ulogin': u[it.index],
-            'rank': it[0].tolist()
+            'ulogin': u[it.index]['ulogin'],
+            'rank': it[0].tolist(),
+            'did': u[it.index]['did']
         })
         it.iternext()
 
@@ -75,13 +76,15 @@ def __get_scores_matrix(db):
         scores = db.query(Score).order_by(Score.fname).all()
 
         d = {}
+        u = []
         for s in scores:
             if s.ulogin not in d:
                 d[s.ulogin] = []
             d[s.ulogin].append(s.score)
+            u.append({'ulogin': s.ulogin, 'did': s.did})
 
         __scores_matrix = np.matrix(list(d.values()))
-        __users_list = list(d.keys())
+        __users_list = u
 
     return __scores_matrix, __users_list
 
