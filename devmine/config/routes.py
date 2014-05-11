@@ -1,4 +1,5 @@
 from devmine.app.controllers.assets_controller import AssetsController
+from devmine.app.controllers.developers_controller import DevelopersController
 from devmine.app.controllers.features_controller import FeaturesController
 from devmine.app.controllers.index_controller import IndexController
 from devmine.app.controllers.users_controller import UsersController
@@ -16,6 +17,9 @@ def setup_routing(app):
 
     # default route
     app.route('/', 'GET', IndexController().index)
+
+    # developers
+    app.route('/developers', 'GET', DevelopersController().index)
 
     # features
     app.route('/features/by_category', 'GET',
