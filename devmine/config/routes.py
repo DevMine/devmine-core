@@ -28,6 +28,7 @@ def setup_routing(app):
 
     # repositories
     app.route('/repositories', 'GET', RepositoriesController().index)
+    app.route('/repositories/<id>', 'GET', RepositoriesController().show)
 
     # scores
     app.route('/scores', 'GET', ScoresController().index)
