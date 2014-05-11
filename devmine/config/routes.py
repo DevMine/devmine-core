@@ -20,6 +20,7 @@ def setup_routing(app):
 
     # developers
     app.route('/developers', 'GET', DevelopersController().index)
+    app.route('/developers/<id>', 'GET', DevelopersController().show)
 
     # features
     app.route('/features', 'GET', FeaturesController().index)
