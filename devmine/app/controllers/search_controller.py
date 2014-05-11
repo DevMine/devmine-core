@@ -30,7 +30,7 @@ class SearchController(ApplicationController):
 
         sorted_ranking = sorted(ranking, key=lambda user: user['rank'],
                 reverse=True)
-        results = {'results': sorted_ranking,
+        results = {'results': sorted_ranking[:100],
                    'elapsed_time': "%0.9f" % (elsapsed_time)}
 
         return json.dumps(results)
