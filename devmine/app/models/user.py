@@ -7,7 +7,7 @@ from sqlalchemy import (
 from devmine.app.models import Base
 
 
-class Feature(Base):
+class User(Base):
     """Model of a user."""
 
     __tablename__ = 'users'

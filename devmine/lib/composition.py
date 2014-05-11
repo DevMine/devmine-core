@@ -2,14 +2,16 @@
 import numpy as np
 
 from devmine.app.models.feature import Feature
+from devmine.app.models.score import Score
 
 
-def construct_weight_vector(db, query):
+def __construct_weight_vector(db, query):
     """
     Construct a weight vector, taking default weight from features from the
     database and adapt weights according to the query, which is in the form
     {'python': 5, 'java': 3}.
-    Return the weight vector as a dictionnary of feature names and their weight.
+    Return the weight vector as a dictionnary of feature names and their
+    weight.
     """
 
     features = db.query(Feature).order_by(Feature.name).all()
@@ -21,7 +23,7 @@ def construct_weight_vector(db, query):
     return weight_vector
 
 
-def compute_scores(A, b, u):
+def __compute_scores(A, b, u):
     """
     Compute the scores vector using a weighted sum.
 
@@ -50,9 +52,23 @@ def compute_scores(A, b, u):
     return retval
 
 
-def rank(db):
+def rank(db, query):
     """
     Compute the ranking for the developers.
     The weight vector is determined from the user query.
     """
-    pass
+    scores = db.query(Score).order_by(Score.fname).all()
+
+    d = {}
+    for s in scores:
+        if s.ulogin not in d:
+            d[s.ulogin] = []
+        d[s.ulogin].append(s.score)
+
+    w = __construct_weight_vector(db, query)
+
+    A = np.matrix(list(d.values()))
+    b = np.matrix(list(w.values())).transpose()
+    u = list(d.keys())
+
+    return __compute_scores(A, b, u)
