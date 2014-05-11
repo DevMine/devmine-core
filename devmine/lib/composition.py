@@ -81,7 +81,7 @@ def __get_scores_matrix(db):
             if s.ulogin not in d:
                 d[s.ulogin] = []
             d[s.ulogin].append(s.score)
-            u[s.ulogin] =  s.did
+            u[s.ulogin] = s.did
 
         __scores_matrix = np.matrix(list(d.values()))
         __users_list = [{'ulogin': v, 'did': u[v]} for v in u]

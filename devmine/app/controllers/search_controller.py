@@ -27,9 +27,8 @@ class SearchController(ApplicationController):
             logging.exception('SearchController:query')
             abort(400, 'Malformed JSON query')
 
-
-        sorted_ranking = sorted(ranking, key=lambda user: user['rank'],
-                reverse=True)
+        sorted_ranking = sorted(
+            ranking, key=lambda user: user['rank'], reverse=True)
         results = {'results': sorted_ranking[:100],
                    'elapsed_time': "%0.9f" % (elsapsed_time)}
 
