@@ -15,6 +15,9 @@ class SearchController(ApplicationController):
 
     def query(self, db, q):
         """Return search result as a JSON string"""
+
+        enable_cors()
+
         try:
             io = StringIO(parse.unquote(q))
             feature_weights = json.load(io)
