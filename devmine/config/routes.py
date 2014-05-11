@@ -32,6 +32,7 @@ def setup_routing(app):
 
     # scores
     app.route('/scores', 'GET', ScoresController().index)
+    app.route('/scores/<id>', 'GET', ScoresController().show)
 
     # search
     app.route('/search/<q>', 'GET', SearchController().query)
