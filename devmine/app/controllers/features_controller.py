@@ -1,4 +1,8 @@
 import json
+
+from bottle import request
+from sqlalchemy.orm.exc import NoResultFound
+
 from devmine.app.models.feature import Feature
 from devmine.app.controllers.application_controller import (
     ApplicationController,
@@ -11,7 +15,16 @@ class FeaturesController(ApplicationController):
     """Class for handling requests on the feature resource."""
 
     def index(self, db):
-        return json.dumps(db.query(Feature).all(), cls=ah.AlchemyEncoder)
+        if 'since' in request.query:
+            since_id = int(request.query['since'])
+        else:
+            since_id = 0
+        try:
+            features = db.query(Feature).filter(Feature.id.between(
+                since_id, since_id + 100)).all()
+        except NoResultFound:
+            features = {}
+        return json.dumps(features, cls=ah.AlchemyEncoder)
 
     def by_category(self, db):
         """Return all features sorted by category as a JSON string
