@@ -102,6 +102,6 @@ def rank(db, query):
     b = np.matrix(w).transpose()
 
     end_time = time.time()
-    elapsed_time = (end_time-start_time) / 1000
+    elapsed_time = (end_time-start_time)
 
     return __compute_ranks(A, b, u), elapsed_time
