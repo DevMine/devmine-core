@@ -15,8 +15,7 @@ class UsersController(ApplicationController):
         """Return the list of all users."""
         since_id = super().get_since_id()
         try:
-            users = db.query(User).filter(User.id.between(
-                since_id, since_id + 100)).all()
+            users = db.query(User).filter(User.id >= since_id).limit(100).all()
         except NoResultFound:
             users = {}
         return json.dumps(users, cls=ah.AlchemyEncoder)

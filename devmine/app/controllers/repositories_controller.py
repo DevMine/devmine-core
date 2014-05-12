@@ -15,8 +15,8 @@ class RepositoriesController(ApplicationController):
         """Return the list of all repositories."""
         since_id = super().get_since_id()
         try:
-            repositories = db.query(Repository).filter(Repository.id.between(
-                since_id, since_id + 100)).all()
+            repositories = db.query(Repository).filter(
+                Repository.id >= since_id).limit(100).all()
         except NoResultFound:
             repositories = {}
         return json.dumps(repositories, cls=ah.AlchemyEncoder)

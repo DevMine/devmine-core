@@ -15,8 +15,8 @@ class ScoresController(ApplicationController):
         """Return the list of all scores."""
         since_id = super().get_since_id()
         try:
-            scores = db.query(Score).filter(Score.id.between(
-                since_id, since_id + 100)).all()
+            scores = db.query(Score).filter(
+                Score.id >= since_id).limit(100).all()
         except NoResultFound:
             scores = {}
         return json.dumps(scores, cls=ah.AlchemyEncoder)

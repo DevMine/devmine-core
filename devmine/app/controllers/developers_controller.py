@@ -15,8 +15,8 @@ class DevelopersController(ApplicationController):
         """Return the list of all developers."""
         since_id = super().get_since_id()
         try:
-            developers = db.query(Developer).filter(Developer.id.between(
-                since_id, since_id + 100)).all()
+            developers = db.query(Developer).filter(
+                Developer.id >= since_id).limit(100).all()
         except NoResultFound:
             developers = {}
         return json.dumps(developers, cls=ah.AlchemyEncoder)

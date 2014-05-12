@@ -16,8 +16,8 @@ class FeaturesController(ApplicationController):
     def index(self, db):
         since_id = super().get_since_id()
         try:
-            features = db.query(Feature).filter(Feature.id.between(
-                since_id, since_id + 100)).all()
+            features = db.query(Feature).filter(
+                Feature.id >= since_id).limit(100).all()
         except NoResultFound:
             features = {}
         return json.dumps(features, cls=ah.AlchemyEncoder)
