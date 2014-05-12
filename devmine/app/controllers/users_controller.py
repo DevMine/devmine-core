@@ -1,5 +1,6 @@
 import json
 
+from bottle import request
 from sqlalchemy.orm.exc import NoResultFound
 
 from devmine.app.models.user import User
@@ -13,7 +14,16 @@ class UsersController(ApplicationController):
 
     def index(self, db):
         """Return the list of all users."""
-        return json.dumps(db.query(User).all(), cls=ah.AlchemyEncoder)
+        if 'since' in request.query:
+            since_id = int(request.query['since'])
+        else:
+            since_id = 0
+        try:
+            users = db.query(User).filter(User.id.between(
+                since_id, since_id + 100)).all()
+        except NoResultFound:
+            users = {}
+        return json.dumps(users, cls=ah.AlchemyEncoder)
 
     def show(self, db, id):
         """Return the user corresponding to the given id."""
