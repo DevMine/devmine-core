@@ -64,7 +64,7 @@ def __compute_ranks(A, b, u):
     return retval
 
 
-def __get_scores_matrix(db):
+def get_scores_matrix(db):
     """
     Returns the scores matrix and the list of associated users.
     Data is computed/accessed once and is cached in memory for later calls.
@@ -74,8 +74,8 @@ def __get_scores_matrix(db):
 
     if __scores_matrix is None:
         scores = db.query(Score).order_by(Score.fname).values(Score.ulogin,
-                                                               Score.score,
-                                                               Score.did)
+                                                              Score.score,
+                                                              Score.did)
         d = {}
         u = {}
         for (ulogin, score, did) in scores:
@@ -99,7 +99,7 @@ def rank(db, query):
 
     w = __construct_weight_vector(db, query)
 
-    A, u = __get_scores_matrix(db)
+    A, u = get_scores_matrix(db)
     b = np.matrix(w).transpose()
 
     end_time = time.time()

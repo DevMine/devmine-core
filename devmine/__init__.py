@@ -1,12 +1,16 @@
 __devmine_version__ = '0.1.0'
 __api_version__ = '1'
 
+import logging
+
 import bottle
 from bottle.ext import sqlalchemy
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from devmine.app.models import Base
 from devmine.config import routes
+from devmine.lib import composition
 
 
 class Devmine:
@@ -45,6 +49,12 @@ class Devmine:
             use_kwargs=False
         )
         self.app.install(sqlalchemy_plugin)
+
+        create_session = sessionmaker(bind=engine)
+        session = create_session()
+        logging.info('Prefetching the scores matrix...')
+        composition.get_scores_matrix(session)
+        session.close()
 
     @staticmethod
     def get_version():
