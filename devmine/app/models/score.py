@@ -2,7 +2,8 @@ from sqlalchemy import (
     Column,
     Integer,
     ForeignKey,
-    String
+    String,
+    Float
 )
 
 from devmine.app.models import Base
@@ -23,7 +24,7 @@ class Score(Base):
     fname = Column(String,
                    ForeignKey('features.name'),
                    nullable=False)
-    score = Column(Integer)
+    score = Column(Float)
 
     def __init__(self):
         pass
