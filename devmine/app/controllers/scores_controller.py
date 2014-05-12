@@ -13,7 +13,13 @@ class ScoresController(ApplicationController):
 
     def index(self, db):
         """Return the list of all scores."""
-        return json.dumps(db.query(Score).all(), cls=ah.AlchemyEncoder)
+        since_id = super().get_since_id()
+        try:
+            scores = db.query(Score).filter(Score.id.between(
+                since_id, since_id + 100)).all()
+        except NoResultFound:
+            scores = {}
+        return json.dumps(scores, cls=ah.AlchemyEncoder)
 
     def show(self, db, id):
         """Return the repository corresponding to the given id."""
