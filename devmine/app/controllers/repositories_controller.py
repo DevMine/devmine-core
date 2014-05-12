@@ -13,7 +13,13 @@ class RepositoriesController(ApplicationController):
 
     def index(self, db):
         """Return the list of all repositories."""
-        return json.dumps(db.query(Repository).all(), cls=ah.AlchemyEncoder)
+        since_id = super().get_since_id()
+        try:
+            repositories = db.query(Repository).filter(Repository.id.between(
+                since_id, since_id + 100)).all()
+        except NoResultFound:
+            repositories = {}
+        return json.dumps(repositories, cls=ah.AlchemyEncoder)
 
     def show(self, db, id):
         """Return the repository corresponding to the given id."""
