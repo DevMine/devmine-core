@@ -13,7 +13,13 @@ class DevelopersController(ApplicationController):
 
     def index(self, db):
         """Return the list of all developers."""
-        return json.dumps(db.query(Developer).all(), cls=ah.AlchemyEncoder)
+        since_id = super().get_since_id()
+        try:
+            developers = db.query(Developer).filter(Developer.id.between(
+                since_id, since_id + 100)).all()
+        except NoResultFound:
+            developers = {}
+        return json.dumps(developers, cls=ah.AlchemyEncoder)
 
     def show(self, db, id):
         """Return the developer correspond to the given id."""
