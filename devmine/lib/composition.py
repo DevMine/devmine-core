@@ -73,15 +73,16 @@ def __get_scores_matrix(db):
     global __users_list
 
     if __scores_matrix is None:
-        scores = db.query(Score).order_by(Score.fname).all()
-
+        scores = db.query(Score).order_by(Score.fname).values(Score.ulogin,
+                                                               Score.score,
+                                                               Score.did)
         d = {}
         u = {}
-        for s in scores:
-            if s.ulogin not in d:
-                d[s.ulogin] = []
-            d[s.ulogin].append(s.score)
-            u[s.ulogin] = s.did
+        for (ulogin, score, did) in scores:
+            if ulogin not in d:
+                d[ulogin] = []
+            d[ulogin].append(score)
+            u[ulogin] = did
 
         __scores_matrix = np.matrix(list(d.values()))
         __users_list = [{'ulogin': v, 'did': u[v]} for v in u]
