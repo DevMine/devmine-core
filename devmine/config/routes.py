@@ -8,6 +8,7 @@ from devmine.app.controllers.repositories_controller import (
 )
 from devmine.app.controllers.scores_controller import ScoresController
 from devmine.app.controllers.search_controller import SearchController
+from devmine.app.controllers.stats_controller import StatsController
 
 
 def setup_routing(app):
@@ -36,6 +37,9 @@ def setup_routing(app):
 
     # search
     app.route('/search/<q>', 'GET', SearchController().query)
+
+    # stats
+    app.route('/stats', 'GET', StatsController().index)
 
     # users
     app.route('/users', 'GET', UsersController().index)
