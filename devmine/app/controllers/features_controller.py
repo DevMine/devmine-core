@@ -14,7 +14,7 @@ class FeaturesController(ApplicationController):
     """Class for handling requests on the feature resource."""
 
     def index(self, db):
-        since_id = super(FeaturesController, self).get_since_id()
+        since_id = super().get_since_id()
         try:
             features = db.query(Feature).filter(Feature.id.between(
                 since_id, since_id + 100)).all()

@@ -13,7 +13,7 @@ class UsersController(ApplicationController):
 
     def index(self, db):
         """Return the list of all users."""
-        since_id = super(UsersController, self).get_since_id()
+        since_id = super().get_since_id()
         try:
             users = db.query(User).filter(User.id.between(
                 since_id, since_id + 100)).all()
