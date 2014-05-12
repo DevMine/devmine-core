@@ -1,6 +1,5 @@
 import json
 
-from bottle import request
 from sqlalchemy.orm.exc import NoResultFound
 
 from devmine.app.models.feature import Feature
@@ -15,10 +14,7 @@ class FeaturesController(ApplicationController):
     """Class for handling requests on the feature resource."""
 
     def index(self, db):
-        if 'since' in request.query:
-            since_id = int(request.query['since'])
-        else:
-            since_id = 0
+        since_id = super(FeaturesController, self).get_since_id()
         try:
             features = db.query(Feature).filter(Feature.id.between(
                 since_id, since_id + 100)).all()
