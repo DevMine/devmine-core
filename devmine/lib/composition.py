@@ -102,7 +102,8 @@ def rank(db, query):
     A, u = get_scores_matrix(db)
     b = np.matrix(w).transpose()
 
+    ranks = __compute_ranks(A, b, u)
     end_time = time.time()
     elapsed_time = (end_time-start_time)
 
-    return __compute_ranks(A, b, u), elapsed_time
+    return ranks, elapsed_time
