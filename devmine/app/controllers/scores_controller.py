@@ -24,6 +24,11 @@ class ScoresController(ApplicationController):
     def show(self, db, id):
         """Return the repository corresponding to the given id."""
         try:
+            int(id)
+        except:
+            abort(400, 'invalid id')
+
+        try:
             score = db.query(Score).filter_by(id=id).one()
         except NoResultFound:
             score = {}

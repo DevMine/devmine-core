@@ -24,6 +24,11 @@ class DevelopersController(ApplicationController):
     def show(self, db, id):
         """Return the developer correspond to the given id."""
         try:
+            int(id)
+        except:
+            abort(400, 'invalid id')
+
+        try:
             developer = db.query(Developer).filter_by(id=id).one()
         except NoResultFound:
             developer = {}

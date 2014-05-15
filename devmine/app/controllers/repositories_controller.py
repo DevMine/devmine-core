@@ -24,6 +24,11 @@ class RepositoriesController(ApplicationController):
     def show(self, db, id):
         """Return the repository corresponding to the given id."""
         try:
+            int(id)
+        except:
+            abort(400, 'invalid id')
+
+        try:
             repository = db.query(Repository).filter_by(id=id).one()
         except NoResultFound:
             repository = {}
