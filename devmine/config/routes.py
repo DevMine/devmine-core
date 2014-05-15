@@ -21,7 +21,7 @@ def setup_routing(app):
 
     # developers
     app.route('/developers', 'GET', DevelopersController().index)
-    app.route('/developers/<id>', 'GET', DevelopersController().show)
+    app.route('/developers/<id:re:[0-9]+>', 'GET', DevelopersController().show)
 
     # features
     app.route('/features', 'GET', FeaturesController().index)
@@ -29,11 +29,11 @@ def setup_routing(app):
 
     # repositories
     app.route('/repositories', 'GET', RepositoriesController().index)
-    app.route('/repositories/<id>', 'GET', RepositoriesController().show)
+    app.route('/repositories/<id:re:[0-9]+>', 'GET', RepositoriesController().show)
 
     # scores
     app.route('/scores', 'GET', ScoresController().index)
-    app.route('/scores/<id>', 'GET', ScoresController().show)
+    app.route('/scores/<id:re:[0-9]+>', 'GET', ScoresController().show)
 
     # search
     app.route('/search/<q>', 'GET', SearchController().query)
@@ -43,5 +43,5 @@ def setup_routing(app):
 
     # users
     app.route('/users', 'GET', UsersController().index)
-    app.route('/users/<id>', 'GET', UsersController().show)
+    app.route('/users/<id:re:[0-9]+>', 'GET', UsersController().show)
     app.route('/users/login/<login>', 'GET', UsersController().login)
