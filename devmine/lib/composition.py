@@ -78,13 +78,14 @@ def get_scores_matrix(db):
                                                               Score.score,
                                                               Score.did)
 
-        features = [f[0] for f in db.query(Feature).values(Feature.name)]
+        features = [f.name for f in
+                    db.query(Feature).order_by(Feature.name).all()]
 
         d = {}
         u = {}
         for (ulogin, fname, score, did) in scores:
             if ulogin not in d:
-                d[ulogin] = [ 0 for _ in features ]
+                d[ulogin] = [0 for _ in features]
             d[ulogin][features.index(fname)] = score
             u[ulogin] = did
 
