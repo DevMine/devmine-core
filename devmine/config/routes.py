@@ -44,3 +44,4 @@ def setup_routing(app):
     # users
     app.route('/users', 'GET', UsersController().index)
     app.route('/users/<id>', 'GET', UsersController().show)
+    app.route('/users/login/<login>', 'GET', UsersController().login)

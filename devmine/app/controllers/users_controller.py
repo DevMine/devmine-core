@@ -1,5 +1,6 @@
 import json
 
+from bottle import abort
 from sqlalchemy.orm.exc import NoResultFound
 
 from devmine.app.models.user import User
@@ -23,7 +24,20 @@ class UsersController(ApplicationController):
     def show(self, db, id):
         """Return the user corresponding to the given id."""
         try:
+            int(id)
+        except:
+            abort(400, 'invalid id')
+
+        try:
             user = db.query(User).filter_by(id=id).one()
         except NoResultFound:
             user = {}
         return json.dumps(user, cls=ah.AlchemyEncoder)
+
+    def login(self, db, login):
+        """Return the user corresponding to the given login."""
+        try:
+            login = db.query(User).filter_by(login=login).all()
+        except NoResultFound:
+            login = {}
+        return json.dumps(login, cls=ah.AlchemyEncoder)
