@@ -79,7 +79,7 @@ def get_scores_matrix(db):
                                                               Score.did)
 
         features = [f.name for f in
-                    db.query(Feature).order_by(Feature.name).all()]
+                    db.query(Feature.name).order_by(Feature.name).all()]
 
         d = {}
         u = {}
