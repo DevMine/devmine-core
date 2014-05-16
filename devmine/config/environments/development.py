@@ -1,5 +1,5 @@
 # server backend
-server = 'tornado'
+server = 'cherrypy'
 
 # debug error messages
 debug = True
