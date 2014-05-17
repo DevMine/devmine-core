@@ -1,6 +1,7 @@
 """This file provides abstraction over the tasks of computing the ranking"""
 import numpy as np
 import time
+import scipy.sparse as sparse
 
 from devmine.app.models.feature import Feature
 from devmine.app.models.score import Score
@@ -49,7 +50,7 @@ def __compute_ranks(A, b, u):
     retval:  Dictionnary of the form {'username1': rank1, ...}
     """
 
-    ranks = np.dot(A, b)
+    ranks = A.dot(b)
 
     retval = []
     it = np.nditer(ranks, flags=['f_index'])
@@ -80,17 +81,30 @@ def get_scores_matrix(db):
 
         features = [f.name for f in
                     db.query(Feature.name).order_by(Feature.name).all()]
+        users_login = [f.ulogin for f in
+                       db.query(Score.ulogin).group_by(Score.ulogin).all()]
+        users = dict(zip(users_login, range(len(users_login))))
+        users_did = dict(zip(users_login, range(len(users_login))))
 
-        d = {}
-        u = {}
+        nfeatures = len(features)
+        nusers = len(users)
+        __scores_matrix = np.zeros((nusers, nfeatures), dtype=np.float32)
+
         for (ulogin, fname, score, did) in scores:
-            if ulogin not in d:
-                d[ulogin] = [0 for _ in features]
-            d[ulogin][features.index(fname)] = score
-            u[ulogin] = did
+            users_did[ulogin] = did
+            __scores_matrix[users[ulogin], features.index(fname)] = score
 
-        __scores_matrix = np.matrix(list(d.values()))
-        __users_list = [{'ulogin': v, 'did': u[v]} for v in u]
+        # Normalize
+        maxs = __scores_matrix.max(axis=0)
+
+        # Ensure that we don't divide by 0
+        at_least_1 = lambda x: x if x != 0 else 1
+        vfunc = np.vectorize(at_least_1)
+
+        __scores_matrix = __scores_matrix / vfunc(maxs)
+        __scores_matrix = sparse.csc_matrix(__scores_matrix)
+
+        __users_list = [{'ulogin': k, 'did': v} for (k,v) in users_did.items()]
 
     return __scores_matrix, __users_list
 
