@@ -74,15 +74,16 @@ def get_scores_matrix(db):
     global __users_list
 
     if __scores_matrix is None:
-        scores = db.query(Score).order_by(Score.fname).values(Score.ulogin,
-                                                              Score.fname,
-                                                              Score.score,
-                                                              Score.did)
+        scores = db.query(Score).order_by(Score.ulogin).values(Score.ulogin,
+                                                               Score.fname,
+                                                               Score.score,
+                                                               Score.did)
 
         features = [f.name for f in
                     db.query(Feature.name).order_by(Feature.name).all()]
         users_login = [f.ulogin for f in
-                       db.query(Score.ulogin).group_by(Score.ulogin).all()]
+                       db.query(Score.ulogin).order_by(
+                           Score.ulogin).group_by(Score.ulogin).all()]
         users = dict(zip(users_login, range(len(users_login))))
         users_did = dict(zip(users_login, range(len(users_login))))
 
@@ -104,8 +105,8 @@ def get_scores_matrix(db):
         __scores_matrix = __scores_matrix / vfunc(maxs)
         __scores_matrix = sparse.csc_matrix(__scores_matrix)
 
-        __users_list = [{'ulogin': k, 'did': v}
-                        for (k, v) in users_did.items()]
+        __users_list = [{'ulogin': k, 'did': users_did[k]}
+                        for k in users_login]
 
     return __scores_matrix, __users_list
 
