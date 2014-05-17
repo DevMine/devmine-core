@@ -1,5 +1,6 @@
 import json
 
+from bottle import abort
 from sqlalchemy.orm.exc import NoResultFound
 
 from devmine.app.models.score import Score
