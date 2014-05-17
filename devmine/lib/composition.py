@@ -104,7 +104,8 @@ def get_scores_matrix(db):
         __scores_matrix = __scores_matrix / vfunc(maxs)
         __scores_matrix = sparse.csc_matrix(__scores_matrix)
 
-        __users_list = [{'ulogin': k, 'did': v} for (k,v) in users_did.items()]
+        __users_list = [{'ulogin': k, 'did': v}
+                        for (k, v) in users_did.items()]
 
     return __scores_matrix, __users_list
 
