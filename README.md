@@ -43,20 +43,19 @@ the [devmine-features](https://github.com/DevMine/devmine-features) repository.
 The online part provides the API and lays in the `devmine` module from this
 repository.
 
-![](data/project-structure.png))
+![](data/project-structure.png)
 
-On the offline part, each feature assigns a "score" to every developer. This
-score is normalized between 0 and 1. On the offline part, each developers gets
-assigned a score, which value is normalized between 0 and 1, for each feature.
-There are two different kind of features: the primitive features and the derived
-features. Primitive features can be used straight from the data source or
-require minimal processing, for instance: lines of code in language X, number of
-GitHub followers, whether the developer is available for hiring and so on.
-Derived features typically require some calculation. For instance, reputation of
-the developer determined by the PageRank algorithm run with followers/following
-developers from GitHub as links or HITS with developers as authorities and
-projects as hubs and so on. Each feature defines a function to compute it and a
-function to normalize it and is highly dependent on the available data sources.
+On the offline part, each developers gets assigned a score for each feature,
+which value is normalized between 0 and 1.  There are two different kind of
+features: the primitive features and the derived features. Primitive features
+can be used straight from the data source or require minimal processing, for
+instance: lines of code in language X, number of GitHub followers, whether the
+developer is available for hiring and so on.  Derived features typically require
+some calculation. For instance, reputation of the developer determined by the
+PageRank algorithm run with followers/following developers from GitHub as links
+or HITS with developers as authorities and projects as hubs and so on. Each
+feature defines a function to compute it and a function to normalize it and is
+highly dependent on the available data sources.
 
 On the online part, queries can be split into two parts: ranking and filtering.
 The ranking part can be viewed as the definition of the "perfect developer", or
