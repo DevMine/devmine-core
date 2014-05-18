@@ -1,7 +1,3 @@
-# devmine-core
-
-Dig into the mine of developers to find precious gems.
-
 ## About
 
 This project is about establishing a complete profile of developers based on
@@ -15,8 +11,8 @@ detailed profile accessible for each of them is the main project goal.
 ## More details about the project
 
 This project, proposed by [Robin Hahling](https://github.com/Rolinh), started as
-a project for a [BigData class](http://data.epfl.ch/bigdatacourse) given at
-[EPFL](http://epfl.ch/) during the master of science in computer science.
+a project for a [Big Data class](http://data.epfl.ch/bigdatacourse) given at
+[EPFL](http://epfl.ch/) for the master of science in computer science.
 
 The main goal is to build a database of developers, along with an evaluation of
 their programming skills, and make it available through a freely accessible API.
@@ -49,8 +45,10 @@ repository.
 
 ![](data/project-structure.png))
 
-On the offline part, each feature assigns a "score" to every developer. There
-are two different kind of features: the primitive features and the derived
+On the offline part, each feature assigns a "score" to every developer. This
+score is normalized between 0 and 1. On the offline part, each developers gets
+assigned a score, which value is normalized between 0 and 1, for each feature.
+There are two different kind of features: the primitive features and the derived
 features. Primitive features can be used straight from the data source or
 require minimal processing, for instance: lines of code in language X, number of
 GitHub followers, whether the developer is available for hiring and so on.
@@ -62,13 +60,23 @@ function to normalize it and is highly dependent on the available data sources.
 
 On the online part, queries can be split into two parts: ranking and filtering.
 The ranking part can be viewed as the definition of the "perfect developer", or
-an assignment of weight to certain features. For ranking, every single feature
-is taken into account. Filtering is used to specify attributes that developers
-must or must not have such as living in Switzerland, being fluent in Java or
-available for hiring.
+an assignment of weight to certain features. More precisely, a search query
+consists of a set a feature names with associated weights provided by the user
+that sends the query through a frontend (typically the web frontend).
+Ranking is computed as a dot product between the scores matrix and the
+weight vector. The scores matrix is a matrix, preloaded into memory, which
+contains the developers as row and the features as column so each matrix cell
+correspond to the score of a developer for a particular feature. The weight
+vector is prefilled with default values for each feature but is modified
+according to the user query prior the dot production computation, which
+determines the ranking. Therefore, every single feature is taken into account to
+determine the ranking but only there weight differ.
+Filtering is used to specify attributes that developers must or must not have
+such as living in Switzerland, being fluent in Java or available for hiring.
 
-The composition function is used for the ranking. Once the ranking is
-established, results are filtered out by the filtering function.
+The composition function, ie the dot product between the scores matrix and the
+weight vector, is used for the ranking. Once the ranking is established, results
+are filtered out by the filtering function.
 
 ## Contribute
 
