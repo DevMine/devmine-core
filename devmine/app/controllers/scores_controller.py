@@ -1,6 +1,5 @@
 import json
 
-from bottle import abort
 from sqlalchemy.orm.exc import NoResultFound
 
 from devmine.app.models.score import Score
@@ -24,11 +23,7 @@ class ScoresController(ApplicationController):
 
     def show(self, db, id):
         """Return the repository corresponding to the given id."""
-        try:
-            int(id)
-        except:
-            abort(400, 'invalid id')
-
+        super().assert_id(id)
         try:
             score = db.query(Score).filter_by(id=id).one()
         except NoResultFound:
