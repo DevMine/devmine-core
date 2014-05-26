@@ -1,7 +1,7 @@
 from sqlalchemy import (
     Boolean,
     Column,
-    Datetime,
+    DateTime,
     Integer,
     String
 )
@@ -21,8 +21,8 @@ class GithubRepository(Base):
     homepage = Column(String)
     fork = Column(Boolean)
     language = Column(String)
-    created_at = Column(Datetime)
-    updated_at = Column(Datetime)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
     def __init__(self):
         pass
