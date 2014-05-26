@@ -15,11 +15,8 @@ class Score(Base):
     __tablename__ = 'scores'
 
     id = Column(Integer, primary_key=True)
-    ulogin = Column(String,
-                    ForeignKey('users.login'),
-                    nullable=False)
-    did = Column(Integer,
-                 ForeignKey('developers.id'),
+    uid = Column(Integer,
+                 ForeignKey('users.id'),
                  nullable=False)
     fname = Column(String,
                    ForeignKey('features.name'),

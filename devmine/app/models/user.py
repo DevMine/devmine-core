@@ -13,7 +13,9 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    login = Column(String, nullable=False, unique=True)
+    nickname = Column(String)
+    realname = Column(String)
 
     def __init__(self):
-        pass
+        self.nickname = ''
+        self.realname = ''
