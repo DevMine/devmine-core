@@ -1,10 +1,12 @@
 from devmine.app.controllers.assets_controller import AssetsController
-from devmine.app.controllers.developers_controller import DevelopersController
+from devmine.app.controllers.users_controller import UsersController
 from devmine.app.controllers.features_controller import FeaturesController
 from devmine.app.controllers.index_controller import IndexController
-from devmine.app.controllers.users_controller import UsersController
-from devmine.app.controllers.repositories_controller import (
-    RepositoriesController
+from devmine.app.controllers.github.users_controller import (
+    GithubUsersController
+)
+from devmine.app.controllers.github.repositories_controller import (
+    GithubRepositoriesController
 )
 from devmine.app.controllers.scores_controller import ScoresController
 from devmine.app.controllers.search_controller import SearchController
@@ -19,18 +21,22 @@ def setup_routing(app):
     # default route
     app.route('/', 'GET', IndexController().index)
 
-    # developers
-    app.route('/developers', 'GET', DevelopersController().index)
-    app.route('/developers/<id:re:[0-9]+>', 'GET', DevelopersController().show)
-
     # features
     app.route('/features', 'GET', FeaturesController().index)
     app.route('/features/by_category', 'GET', FeaturesController().by_category)
 
-    # repositories
-    app.route('/repositories', 'GET', RepositoriesController().index)
-    app.route('/repositories/<id:re:[0-9]+>', 'GET',
-              RepositoriesController().show)
+    # Github users
+    app.route('/github/users', 'GET', GithubUsersController().index)
+    app.route('/github/users/<id:re:[0-9]+>', 'GET',
+              GithubUsersController().show)
+    app.route('/github/users/login/<login>', 'GET',
+              GithubUsersController().login)
+
+    # Github repositories
+    app.route('/github/repositories', 'GET',
+              GithubRepositoriesController().index)
+    app.route('/github/repositories/<id:re:[0-9]+>', 'GET',
+              GithubRepositoriesController().show)
 
     # scores
     app.route('/scores', 'GET', ScoresController().index)
@@ -45,4 +51,3 @@ def setup_routing(app):
     # users
     app.route('/users', 'GET', UsersController().index)
     app.route('/users/<id:re:[0-9]+>', 'GET', UsersController().show)
-    app.route('/users/login/<login>', 'GET', UsersController().login)
